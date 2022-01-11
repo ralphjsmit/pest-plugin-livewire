@@ -14,6 +14,7 @@
   "require": {
     "php": "^8.0",
     "illuminate/support": "^8.76",
+    "livewire/livewire": "^2.8",
     "pestphp/pest": "^1.17",
     "pestphp/pest-plugin": "^1.0"
   },
@@ -27,7 +28,13 @@
       "src/Expectations.php"
     ]
   },
+  "autoload-dev": {
+    "psr-4": {
+      "RalphJSmit\\PestPluginLivewire\\Tests\\": "tests"
+    }
+  },
   "require-dev": {
+    "orchestra/testbench": "^6.23",
     "pestphp/pest-dev-tools": "dev-master"
   },
   "extra": {

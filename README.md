@@ -1,32 +1,106 @@
 # Test your Livewire forms with Pest
 
+This package provides a convenient way to test your Livewire forms and speed up your workflow. It adds helpers that make repetitive tasks faster, like testing whether properties are required or not.
+
 ## Contents
 
 1. Expectations
-    1. [expect(...)->toHaveContents()](#expect-tohavecontents)
-    2. [expect(...)->toExist()](#expect-toexist)
-    3. [expect(...)->toHaveNamespace()](#expect-tohavenamespace)
-2. Higher-order expectations
-    1. [expect(...)->contents->toBe(...)](#expect-contents-tobe)
-3. Functions
-    1. [rm($path, $allowNonExisting)](#rmpath-allownonexisting)
-    2. [rmdir_recursive($dir)](#rmdir_recursivedir)
-    3. [contents($path)](#contentspath)
-    4. [expectFailedAssertion()](#expectfailedassertion)
+    1. [expect(...)->toHaveRequiredProperties()](#expect-tohaverequiredproperties)
+    1. [expect(...)->toNotHaveRequiredProperties()](#expect-tonothaverequiredproperties)
+1. Functions
+    1. [assertRequiredProperties](#assertrequiredproperties)
+    1. [assertNotRequiredProperties](#assertnotrequiredproperties)
+    1. [validInput](#validinput)
 
 ## Expectations
 
-### expect(...)->toHaveContents()
+### expect(...)->toHaveRequiredProperties()
 
-Test whether a file has certain contents:
+Test whether Livewire properties are required. Consider the following dummy Livewire component:
 
 ```php
-file_put_contents(__DIR__ . '/tmp/fileA.php', 'I\'m a test file!');
-file_put_contents(__DIR__ . '/tmp/fileB.php', 'I\'m a second test file!');
+class TestRequiredPropertiesComponent extends Component
+{
+    public string $email_Req = '';
+    public string $email = '';
+    public ?int $age_Req = null;
+    public ?int $age = null;
 
-expect(__DIR__ . '/tmp/fileA.php')->toHaveContents('I\'m a test file!');
-expect(__DIR__ . '/tmp/fileB.php')->not->toHaveContents('I\'m a test file!');
+    protected array $rules = [
+        'email' => '',
+        'email_Req' => 'required',
+        'age' => 'numeric',
+        'age_Req' => 'numeric|required',
+    ];
+
+    public function render(): string
+    {
+        return '<div></div>';
+    }
+
+    public function submit()
+    {
+        $this->validate();
+    }
 ```
+
+```php
+use function RalphJSmit\PestPluginLivewire\validInput;
+
+$component = Livewire::test(TestRequiredPropertiesComponent::class);
+
+$validInput = validInput([
+    'email' => 'alex@example.com',
+    'age' => 25,
+]);
+
+expect($component)
+    ->toHaveRequiredProperties(validInput, ['email_Req', 'age_Req'], 'submit');
+```
+
+### expect(...)->toNotHaveRequiredProperties()
+
+Test whether Livewire properties aren't required. Let's continue the example from above with a test for the properties that are not required:
+
+```php
+use function RalphJSmit\PestPluginLivewire\validInput;
+
+$component = Livewire::test(TestRequiredPropertiesComponent::class);
+
+$validInput = validInput([
+    'email' => 'alex@example.com',
+    'age' => 25,
+]);
+
+expect($component)
+    ->toNotHaveRequiredProperties(validInput, ['email', 'name'], 'submit');
+```
+
+## Functions
+
+### assertRequiredProperties()
+
+Use this function to test whether Livewire properties are required. Consider using an `expect(...)` call if you want to chain multiple expectations:
+
+```php
+use function RalphJSmit\PestPluginLivewire\assertRequiredProperties;
+
+assertRequiredProperties(TestableLivewire $livewire, Collection $validInput, array $requiredProperties, string $submitFunction);
+```
+
+### assertNotRequiredProperties()
+
+Use this function to test whether Livewire properties aren't required. Consider using an `expect(...)` call if you want to chain multiple expectations:
+
+```php
+use function RalphJSmit\PestPluginLivewire\assertNotRequiredProperties;
+
+assertNotRequiredProperties(TestableLivewire $livewire, Collection $validInput, array $requiredProperties, string $submitFunction);
+```
+
+### validInput()
+
+Use this function to get a `ValidInput` object (Laravel Collection). It's needed for using the above functions.
 
 ## General
 
