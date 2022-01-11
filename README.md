@@ -8,9 +8,9 @@ This package provides a convenient way to test your Livewire forms and speed up 
     1. [expect(...)->toHaveRequiredProperties()](#expect-tohaverequiredproperties)
     1. [expect(...)->toNotHaveRequiredProperties()](#expect-tonothaverequiredproperties)
 1. Functions
-    1. [assertRequiredProperties](#assertrequiredproperties)
-    1. [assertNotRequiredProperties](#assertnotrequiredproperties)
-    1. [validInput](#validinput)
+    1. [assertRequiredProperties(...)](#assertrequiredproperties)
+    1. [assertNotRequiredProperties(...)](#assertnotrequiredproperties)
+    1. [validInput(...)](#validinput)
 
 ## Expectations
 
