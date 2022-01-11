@@ -58,6 +58,8 @@ expect($component)
     ->toHaveRequiredProperties(validInput, ['email_Req', 'age_Req'], 'submit');
 ```
 
+> **NB.:** Using `->not` to negate the test is currently **not yet supported**.
+
 ### expect(...)->toNotHaveRequiredProperties()
 
 Test whether Livewire properties aren't required. Let's continue the example from above with a test for the properties that are not required:
@@ -75,6 +77,8 @@ $validInput = validInput([
 expect($component)
     ->toNotHaveRequiredProperties(validInput, ['email', 'name'], 'submit');
 ```
+
+> **NB.:** Using `->not` to negate the test is currently **not yet supported**.
 
 ## Functions
 
