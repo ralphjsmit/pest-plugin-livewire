@@ -6,3 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - Added: Changelog
 - Fixed: removed dump statements
+
+## 1.0.0 - 2022-01-11
+
+- Initial release
