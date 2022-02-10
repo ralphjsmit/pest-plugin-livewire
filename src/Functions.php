@@ -3,6 +3,7 @@
 namespace RalphJSmit\PestPluginLivewire;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Livewire\Testing\TestableLivewire;
 use ReflectionProperty;
 
@@ -43,6 +44,10 @@ if ( ! function_exists('assertNotRequiredProperties') ) {
 if ( ! function_exists('getAllowedDefaultValue') ) {
     function getAllowedDefaultValue(object $instance, string $property): mixed
     {
+        if ( Str::contains($property, '.') ) {
+            return null;
+        }
+
         if ( ! property_exists($instance, $property) ) {
             return null;
         }
