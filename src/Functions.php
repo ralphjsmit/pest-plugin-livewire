@@ -14,52 +14,47 @@ if ( ! function_exists('validInput') ) {
 }
 
 if ( ! function_exists('assertRequiredProperties') ) {
-    function assertRequiredProperties(
-        TestableLivewire $livewire,
-        Collection $validInput,
-        array $requiredProperties,
-        string $submitFunction
-    ): void {
+    function assertRequiredProperties(TestableLivewire $livewire, Collection $validInput, array $requiredProperties, string $submitMethod = 'submit'): void
+    {
         foreach ($requiredProperties as $requiredProperty) {
-            $reflection = ( new ReflectionProperty($livewire->instance(), $requiredProperty) )->getType();
-
-            $allowedDefaultValue = $reflection->allowsNull()
-                ? null
-                : match ( $reflection->getName() ) {
-                    'string' => '',
-                    'int' => 0,
-                    'array' => [],
-                };
+            $allowedDefaultValue = getAllowedDefaultValue($livewire->instance(), $requiredProperty);
 
             $livewire
                 ->set($validInput->put(key: $requiredProperty, value: $allowedDefaultValue,)->toArray())
-                ->call($submitFunction)
+                ->call($submitMethod)
                 ->assertHasErrors([$requiredProperty => ['required']]);
         }
     }
 }
 if ( ! function_exists('assertNotRequiredProperties') ) {
-    function assertNotRequiredProperties(
-        TestableLivewire $livewire,
-        Collection $validInput,
-        array $notRequiredProperties,
-        string $submitFunction
-    ): void {
+    function assertNotRequiredProperties(TestableLivewire $livewire, Collection $validInput, array $notRequiredProperties, string $submitMethod = 'submit'): void
+    {
         foreach ($notRequiredProperties as $notRequiredProperty) {
-            $reflection = ( new ReflectionProperty($livewire->instance(), $notRequiredProperty) )->getType();
-
-            $allowedDefaultValue = $reflection->allowsNull()
-                ? null
-                : match ( $reflection->getName() ) {
-                    'string' => '',
-                    'int' => 0,
-                    'array' => [],
-                };
+            $allowedDefaultValue = getAllowedDefaultValue($livewire->instance(), $notRequiredProperty);
 
             $livewire
                 ->set($validInput->put(key: $notRequiredProperty, value: $allowedDefaultValue,)->toArray())
-                ->call($submitFunction)
+                ->call($submitMethod)
                 ->assertHasNoErrors([$notRequiredProperty => ['required']]);
         }
+    }
+}
+
+if ( ! function_exists('getAllowedDefaultValue') ) {
+    function getAllowedDefaultValue(object $instance, string $property): mixed
+    {
+        if ( ! property_exists($instance, $property) ) {
+            return null;
+        }
+
+        $reflection = ( new ReflectionProperty(class: $instance, property: $property) )->getType();
+
+        return $reflection->allowsNull()
+            ? null
+            : match ( $reflection->getName() ) {
+                'string' => '',
+                'int' => 0,
+                'array' => [],
+            };
     }
 }
