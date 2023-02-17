@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.3.0 - 2023-02-17
+
+- Add Laravel 10 support in #1
+
 ## 1.2.0 - 2022-02-10
 
 - Add support for validating nested properties (with a dot)
