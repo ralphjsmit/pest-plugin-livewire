@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.0 - 2023-04-18
+
+- Add support for Pest V2
+
 ## 1.3.0 - 2023-02-17
 
 - Add Laravel 10 support in #1
