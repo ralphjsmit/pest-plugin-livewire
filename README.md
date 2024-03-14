@@ -2,6 +2,9 @@
 
 This package provides a convenient way to test your Livewire forms and speed up your workflow. It adds helpers that make repetitive tasks faster, like testing whether properties are required or not.
 
+> [!IMPORTANT]  
+> This package works only with Livewire V2 and up to Laravel 10. Therefore, it will not be updated to support Livewire V3 and/or Laravel 11 or higher. The repository will be archived. 
+
 ## Contents
 
 1. Expectations
