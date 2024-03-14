@@ -7,14 +7,23 @@ use Livewire\Component;
 class TestRequiredPropertiesComponent extends Component
 {
     public string $email_Req = '';
+
     public string $email = '';
+
     public ?int $age_Req = null;
+
     public ?int $age = null;
+
     public string $name_Req = '';
+
     public string $name = '';
+
     public string $company_Req = '';
+
     public string $company = '';
+
     public array $workExperience_Req = [];
+
     public array $workExperience = [];
 
     protected array $rules = [
